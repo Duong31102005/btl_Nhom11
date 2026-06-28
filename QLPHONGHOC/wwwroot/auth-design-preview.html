@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Preview - Quản Lý Phòng Học Auth Pages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+
+        .preview-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .preview-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .preview-box h2 {
+            text-align: center;
+            color: #0066cc;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            overflow: hidden;
+        }
+
+        .mock-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .mock-form.register {
+            max-width: 450px;
+        }
+
+        .mock-header {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            margin: -40px -30px 30px -30px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .mock-header h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .mock-header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .mock-input-group {
+            margin-bottom: 16px;
+        }
+
+        .mock-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 13px;
+        }
+
+        .mock-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: #f9f9f9;
+        }
+
+        .mock-button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .mock-footer {
+            text-align: center;
+            padding: 16px 30px;
+            background-color: #f5f5f5;
+            border-radius: 0 0 12px 12px;
+            margin: 30px -30px -40px -30px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .mock-footer a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .features {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .features h2 {
+            color: #0066cc;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            padding: 15px;
+            border-left: 4px solid #0066cc;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .feature-item h3 {
+            color: #0066cc;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .tech-stack {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        .tech-stack h2 {
+            color: #0066cc;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .tech-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tech-item {
+            padding: 12px;
+            background: linear-gradient(135deg, #e6f0ff 0%, #f0f6ff 100%);
+            border-radius: 6px;
+            font-size: 13px;
+            color: #0052a3;
+        }
+
+        @media (max-width: 768px) {
+            .preview-section {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Thiết Kế Giao Diện Xác Thực - Quản Lý Phòng Học</h1>
+
+        <div class="preview-section">
+            <!-- Login Preview -->
+            <div class="preview-box">
+                <h2>📍 Trang Đăng Nhập</h2>
+                <div class="preview-frame">
+                    <div class="mock-form">
+                        <div class="mock-header">
+                            <h3>Quản lý Phòng Học</h3>
+                            <p>Hệ thống quản lý cơ sở vật chất</p>
+                        </div>
+
+                        <div class="mock-input-group">
+                            <label class="mock-label">👤 Tên đăng nhập</label>
+                            <input type="text" class="mock-input" placeholder="Nhập tên đăng nhập của bạn">
+                        </div>
+
+                        <div class="mock-input-group">
+                            <label class="mock-label">🔐 Mật khẩu</label>
+                            <input type="password" class="mock-input" placeholder="Nhập mật khẩu của bạn">
+                        </div>
+
+                        <button class="mock-button">Đăng nhập</button>
+
+                        <div class="mock-footer">
+                            Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Preview -->
+            <div class="preview-box">
+                <h2>📝 Trang Đăng Ký</h2>
+                <div class="preview-frame">
+                    <div class="mock-form register">
+                        <div class="mock-header">
+                            <h3>Tạo Tài Khoản</h3>
+                            <p>Đăng ký để sử dụng hệ thống</p>
+                        </div>
+
+                        <div class="mock-input-group" style="font-size: 11px;">
+                            <label class="mock-label">👤 Tên đăng nhập</label>
+                            <input type="text" class="mock-input" placeholder="Chọn tên đăng nhập" style="font-size: 11px;">
+                        </div>
+
+                        <div class="mock-input-group" style="font-size: 11px;">
+                            <label class="mock-label">✉️ Email</label>
+                            <input type="email" class="mock-input" placeholder="Nhập email" style="font-size: 11px;">
+                        </div>
+
+                        <div class="mock-input-group" style="font-size: 11px;">
+                            <label class="mock-label">🔐 Mật khẩu</label>
+                            <input type="password" class="mock-input" placeholder="Mật khẩu" style="font-size: 11px;">
+                            <div style="margin-top: 6px; height: 3px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
+                                <div style="height: 100%; width: 66%; background: #ffc107;"></div>
+                            </div>
+                            <p style="font-size: 11px; color: #666; margin-top: 4px;">Độ mạnh: <span style="color: #ffc107;">Trung bình</span></p>
+                        </div>
+
+                        <button class="mock-button">Đăng ký tài khoản</button>
+
+                        <div class="mock-footer">
+                            Đã có tài khoản? <a href="#">Đăng nhập ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <h2>✨ Các Tính Năng Chính</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🎨 Giao Diện Hiện Đại</h3>
+                    <p>Thiết kế tối giản (Minimalist) với gradient xanh dương chuyên nghiệp</p>
+                </div>
+                <div class="feature-item">
+                    <h3>✅ Validation Real-time</h3>
+                    <p>Kiểm tra dữ liệu ngay khi user nhập với thông báo lỗi chi tiết</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔒 Password Strength</h3>
+                    <p>Chỉ báo độ mạnh mẽ của mật khẩu (Yếu, Trung bình, Mạnh)</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📱 Responsive Design</h3>
+                    <p>Hoạt động tốt trên tất cả thiết bị (Desktop, Tablet, Mobile)</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🎯 Accessible</h3>
+                    <p>Hỗ trợ keyboard navigation, screen readers, semantic HTML</p>
+                </div>
+                <div class="feature-item">
+                    <h3>⚡ Performance</h3>
+                    <p>Load nhanh, animations mượt mà, optimized assets</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="tech-stack">
+            <h2>🛠️ Công Nghệ Sử Dụng</h2>
+            <div class="tech-items">
+                <div class="tech-item">✨ Bootstrap 5 - Responsive Framework</div>
+                <div class="tech-item">🎨 Custom CSS - Modern Styling</div>
+                <div class="tech-item">📝 HTML5 - Semantic Markup</div>
+                <div class="tech-item">⚙️ JavaScript - Form Validation</div>
+                <div class="tech-item">🔐 ASP.NET Core - Backend</div>
+                <div class="tech-item">💾 Entity Framework - ORM</div>
+            </div>
+        </div>
+
+        <!-- Validation Rules -->
+        <div style="background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 40px;">
+            <h2 style="color: #0066cc; margin-bottom: 20px; font-size: 20px;">📋 Quy Tắc Validation</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <tr style="border-bottom: 2px solid #0066cc;">
+                    <th style="text-align: left; padding: 10px; color: #0066cc;">Trường</th>
+                    <th style="text-align: left; padding: 10px; color: #0066cc;">Quy Tắc</th>
+                    <th style="text-align: left; padding: 10px; color: #0066cc;">Thông Báo Lỗi</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 10px;">Tên đăng nhập</td>
+                    <td style="padding: 10px;">3-20 ký tự, [a-zA-Z0-9_]</td>
+                    <td style="padding: 10px;">"Tên đăng nhập chỉ chứa chữ, số và dấu gạch dưới"</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 10px;">Email</td>
+                    <td style="padding: 10px;">Format email hợp lệ</td>
+                    <td style="padding: 10px;">"Email không đúng định dạng"</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 10px;">Số điện thoại</td>
+                    <td style="padding: 10px;">+84/0 + 9-10 chữ số</td>
+                    <td style="padding: 10px;">"Số điện thoại không hợp lệ"</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 10px;">Mật khẩu</td>
+                    <td style="padding: 10px;">≥ 6 ký tự</td>
+                    <td style="padding: 10px;">"Mật khẩu phải có ít nhất 6 ký tự"</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">Xác nhận mật khẩu</td>
+                    <td style="padding: 10px;">Khớp với Mật khẩu</td>
+                    <td style="padding: 10px;">"Mật khẩu xác nhận không khớp"</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Color Palette -->
+        <div style="background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 40px; margin-bottom: 40px;">
+            <h2 style="color: #0066cc; margin-bottom: 20px; font-size: 20px;">🎨 Bảng Màu</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                <div>
+                    <div style="width: 100%; height: 60px; background: #0066cc; border-radius: 6px; margin-bottom: 8px;"></div>
+                    <p style="font-size: 13px; color: #666;">Primary Blue<br>#0066cc</p>
+                </div>
+                <div>
+                    <div style="width: 100%; height: 60px; background: #0052a3; border-radius: 6px; margin-bottom: 8px;"></div>
+                    <p style="font-size: 13px; color: #666;">Primary Blue Dark<br>#0052a3</p>
+                </div>
+                <div>
+                    <div style="width: 100%; height: 60px; background: #e6f0ff; border-radius: 6px; margin-bottom: 8px;"></div>
+                    <p style="font-size: 13px; color: #666;">Primary Blue Light<br>#e6f0ff</p>
+                </div>
+                <div>
+                    <div style="width: 100%; height: 60px; background: #28a745; border-radius: 6px; margin-bottom: 8px;"></div>
+                    <p style="font-size: 13px; color: #666;">Success Green<br>#28a745</p>
+                </div>
+                <div>
+                    <div style="width: 100%; height: 60px; background: #dc3545; border-radius: 6px; margin-bottom: 8px;"></div>
+                    <p style="font-size: 13px; color: #666;">Error Red<br>#dc3545</p>
+                </div>
+                <div>
+                    <div style="width: 100%; height: 60px; background: #f5f5f5; border-radius: 6px; margin-bottom: 8px; border: 1px solid #ddd;"></div>
+                    <p style="font-size: 13px; color: #666;">Light Gray<br>#f5f5f5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

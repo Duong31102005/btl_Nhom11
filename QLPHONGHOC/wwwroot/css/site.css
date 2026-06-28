@@ -1,0 +1,506 @@
+/* ============================================================
+   QLPHONGHOC — Design System v2.0
+   Enterprise UI Design Tokens & Base Styles
+   Font: Inter (Google Fonts)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================================
+   1. CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   ============================================================ */
+:root {
+    /* --- Color: Brand --- */
+    --primary-blue:     #1A56DB;
+    --primary-hover:    #1E40AF;
+    --primary-light:    #EEF2FF;
+    --primary-glow:     rgba(26, 86, 219, 0.15);
+
+    /* --- Color: Background --- */
+    --bg-canvas:        #F1F5F9;
+    --bg-card:          #FFFFFF;
+    --bg-sidebar:       #0F172A;
+    --bg-sidebar-hover: rgba(255,255,255,0.08);
+    --bg-sidebar-active:rgba(26, 86, 219, 0.25);
+
+    /* --- Color: Text --- */
+    --text-main:        #111928;
+    --text-sub:         #637381;
+    --text-inverse:     #F9FAFB;
+    --text-sidebar:     #CBD5E1;
+    --text-sidebar-active: #FFFFFF;
+
+    /* --- Color: Border --- */
+    --border-color:     #E5E7EB;
+    --border-focus:     #1A56DB;
+
+    /* --- Color: Status --- */
+    --accent-success:   #10B981;
+    --accent-success-bg:#D1FAE5;
+    --accent-warning:   #F59E0B;
+    --accent-warning-bg:#FEF3C7;
+    --accent-danger:    #EF4444;
+    --accent-danger-bg: #FEE2E2;
+    --accent-info:      #06B6D4;
+    --accent-info-bg:   #CFFAFE;
+    --accent-purple:    #8B5CF6;
+    --accent-purple-bg: #EDE9FE;
+
+    /* --- Spacing (8pt Grid) --- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* --- Border Radius --- */
+    --radius-sm:   4px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-xl:   16px;
+    --radius-full: 9999px;
+
+    /* --- Shadows --- */
+    --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-lg:  0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    --shadow-xl:  0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    --shadow-card:0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+
+    /* --- Sidebar --- */
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+
+    /* --- Transitions --- */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 400ms ease;
+}
+
+/* ============================================================
+   2. BASE RESET & TYPOGRAPHY
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-main);
+    background: var(--bg-canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Scale */
+h1, .h1 { font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -0.02em; }
+h2, .h2 { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; }
+h3, .h3 { font-size: 18px; line-height: 26px; font-weight: 600; }
+h4, .h4 { font-size: 16px; line-height: 24px; font-weight: 600; }
+h5, .h5 { font-size: 14px; line-height: 20px; font-weight: 600; }
+p       { font-size: 14px; line-height: 20px; font-weight: 400; color: var(--text-sub); }
+
+.text-caption { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-micro   { font-size: 10px; line-height: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+a { text-decoration: none; color: var(--primary-blue); transition: color var(--transition-fast); }
+a:hover { color: var(--primary-hover); }
+
+img, svg { vertical-align: middle; }
+
+/* ============================================================
+   3. BUTTON COMPONENTS
+   ============================================================ */
+button, .btn {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-light);
+}
+
+.btn-danger {
+    background: var(--accent-danger);
+    color: white;
+    border-color: var(--accent-danger);
+}
+
+.btn-danger:hover {
+    background: #DC2626;
+    border-color: #DC2626;
+}
+
+.btn-success {
+    background: var(--accent-success);
+    color: white;
+    border-color: var(--accent-success);
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.btn-warning {
+    background: var(--accent-warning);
+    color: white;
+    border-color: var(--accent-warning);
+}
+
+.btn-info {
+    background: var(--accent-info);
+    color: white;
+    border-color: var(--accent-info);
+}
+
+.btn-sm {
+    padding: var(--space-1) var(--space-3);
+    font-size: 13px;
+}
+
+.btn-lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: 15px;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* ============================================================
+   4. FORM COMPONENTS
+   ============================================================ */
+.form-group {
+    margin-bottom: var(--space-6);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="search"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    color: var(--text-main);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-check {
+    margin-bottom: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.form-text {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: 12px;
+    color: var(--text-sub);
+}
+
+.form-text.error {
+    color: var(--accent-danger);
+}
+
+/* ============================================================
+   5. BADGE COMPONENTS
+   ============================================================ */
+.badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badge-success {
+    background: var(--accent-success-bg);
+    color: var(--accent-success);
+}
+
+.badge-danger {
+    background: var(--accent-danger-bg);
+    color: var(--accent-danger);
+}
+
+.badge-warning {
+    background: var(--accent-warning-bg);
+    color: var(--accent-warning);
+}
+
+.badge-info {
+    background: var(--accent-info-bg);
+    color: var(--accent-info);
+}
+
+.badge-primary {
+    background: var(--primary-light);
+    color: var(--primary-blue);
+}
+
+.badge-purple {
+    background: var(--accent-purple-bg);
+    color: var(--accent-purple);
+}
+
+.badge-outline {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-sub);
+}
+
+/* ============================================================
+   6. CARD COMPONENTS
+   ============================================================ */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+.card-body {
+    flex: 1;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   7. TABLE COMPONENTS
+   ============================================================ */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table thead {
+    background: var(--bg-canvas);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table th {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+}
+
+.table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:hover {
+    background: rgba(26, 86, 219, 0.02);
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* ============================================================
+   8. UTILITY CLASSES
+   ============================================================ */
+.d-flex      { display: flex !important; }
+.d-none      { display: none !important; }
+.d-block     { display: block !important; }
+.d-inline    { display: inline !important; }
+.d-inline-flex { display: inline-flex !important; }
+.align-center { align-items: center !important; }
+.align-start  { align-items: flex-start !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.flex-wrap   { flex-wrap: wrap !important; }
+.flex-1      { flex: 1 !important; }
+.gap-1 { gap: var(--space-1) !important; }
+.gap-2 { gap: var(--space-2) !important; }
+.gap-3 { gap: var(--space-3) !important; }
+.gap-4 { gap: var(--space-4) !important; }
+.gap-6 { gap: var(--space-6) !important; }
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+.h-auto { height: auto !important; }
+.text-center { text-align: center !important; }
+.text-right  { text-align: right !important; }
+.text-left   { text-align: left !important; }
+.m-0 { margin: 0 !important; }
+.m-auto { margin: auto !important; }
+.mt-1 { margin-top: var(--space-1) !important; }
+.mt-2 { margin-top: var(--space-2) !important; }
+.mt-4 { margin-top: var(--space-4) !important; }
+.mt-6 { margin-top: var(--space-6) !important; }
+.mb-1 { margin-bottom: var(--space-1) !important; }
+.mb-2 { margin-bottom: var(--space-2) !important; }
+.mb-3 { margin-bottom: var(--space-3) !important; }
+.mb-4 { margin-bottom: var(--space-4) !important; }
+.mb-6 { margin-bottom: var(--space-6) !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+.ms-auto { margin-left: auto !important; }
+.me-2 { margin-right: var(--space-2) !important; }
+.me-auto { margin-right: auto !important; }
+.p-0 { padding: 0 !important; }
+.p-4 { padding: var(--space-4) !important; }
+.p-6 { padding: var(--space-6) !important; }
+.px-4 { padding-left: var(--space-4) !important; padding-right: var(--space-4) !important; }
+.py-2 { padding-top: var(--space-2) !important; padding-bottom: var(--space-2) !important; }
+.fw-400  { font-weight: 400 !important; }
+.fw-500  { font-weight: 500 !important; }
+.fw-600  { font-weight: 600 !important; }
+.fw-700  { font-weight: 700 !important; }
+.text-muted { color: var(--text-sub) !important; }
+.text-primary { color: var(--primary-blue) !important; }
+.text-success { color: var(--accent-success) !important; }
+.text-danger  { color: var(--accent-danger) !important; }
+.text-warning { color: var(--accent-warning) !important; }
+.text-info { color: var(--accent-info) !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.cursor-pointer { cursor: pointer !important; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+/* ============================================================
+   9. RESPONSIVE UTILITIES
+   ============================================================ */
+@media (max-width: 768px) {
+    h1, .h1 { font-size: 24px; line-height: 32px; }
+    h2, .h2 { font-size: 20px; line-height: 28px; }
+    h3, .h3 { font-size: 16px; line-height: 24px; }
+
+    .d-md-none { display: none !important; }
+    .d-md-block { display: block !important; }
+    .d-md-flex { display: flex !important; }
+
+    .table td, .table th {
+        padding: var(--space-2) var(--space-3);
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 390px) {
+    :root {
+        --space-4: 12px;
+        --space-6: 16px;
+    }
+
+    h1, .h1 { font-size: 20px; line-height: 28px; }
+    h2, .h2 { font-size: 18px; line-height: 24px; }
+    h3, .h3 { font-size: 14px; line-height: 20px; }
+
+    .card { padding: var(--space-4); }
+}
+.text-warning { color: var(--accent-warning) !important; }

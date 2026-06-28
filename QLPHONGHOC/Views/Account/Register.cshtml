@@ -1,0 +1,225 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Đăng ký tài khoản hệ thống Quản lý Phòng Học" />
+    <title>Đăng ký — Quản Lý Phòng Học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/auth.css" />
+</head>
+<body>
+<div class="auth-wrapper">
+    <!-- ===== BRAND PANEL ===== -->
+    <div class="auth-brand-panel">
+        <div class="brand-logo">
+            <div class="brand-logo-icon">🏫</div>
+            <span class="brand-logo-text">QL Phòng Học</span>
+        </div>
+
+        <div class="brand-hero">
+            <h1>Tạo tài khoản<br />miễn phí</h1>
+            <p>Đăng ký để bắt đầu quản lý và đặt lịch phòng học một cách dễ dàng. Tài khoản cần được quản trị viên phê duyệt trước khi sử dụng.</p>
+        </div>
+
+        <div class="brand-features">
+            <div class="brand-feature">
+                <div class="brand-feature-icon">✅</div>
+                <span class="brand-feature-text">Đăng ký nhanh chóng — dưới 1 phút</span>
+            </div>
+            <div class="brand-feature">
+                <div class="brand-feature-icon">🛡️</div>
+                <span class="brand-feature-text">Mật khẩu được mã hoá an toàn</span>
+            </div>
+            <div class="brand-feature">
+                <div class="brand-feature-icon">👤</div>
+                <span class="brand-feature-text">Phân quyền theo vai trò rõ ràng</span>
+            </div>
+        </div>
+
+        <div class="brand-dots">
+            @for (int i = 0; i < 25; i++)
+            {
+                <div class="brand-dot"></div>
+            }
+        </div>
+    </div>
+
+    <!-- ===== FORM PANEL ===== -->
+    <div class="auth-form-panel">
+        <div class="auth-form-header">
+            <h2>Tạo tài khoản mới</h2>
+            <p>Điền thông tin bên dưới để đăng ký</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="auth-alert auth-alert-error">
+                <span>⚠️</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+
+        <form asp-action="Register" method="post" class="auth-form" id="registerForm" novalidate data-loading>
+            @Html.AntiForgeryToken()
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="hoTen">Họ và tên <span style="color:#EF4444">*</span></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="hoTen"
+                        name="HoTen"
+                        placeholder="Nguyễn Văn A"
+                        required
+                        autofocus />
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tenDangNhap">Tên đăng nhập <span style="color:#EF4444">*</span></label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="tenDangNhap"
+                        name="TenDangNhap"
+                        placeholder="nguyenvana"
+                        autocomplete="username"
+                        required
+                        minlength="3" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email <span style="color:#EF4444">*</span></label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="Email"
+                    placeholder="example@university.edu.vn"
+                    autocomplete="email"
+                    required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="soDienThoai">Số điện thoại</label>
+                <input
+                    type="tel"
+                    class="form-control"
+                    id="soDienThoai"
+                    name="SoDienThoai"
+                    placeholder="0901 234 567" />
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="matKhau">Mật khẩu <span style="color:#EF4444">*</span></label>
+                    <div class="input-with-toggle">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="matKhau"
+                            name="MatKhau"
+                            placeholder="Tối thiểu 6 ký tự"
+                            autocomplete="new-password"
+                            required
+                            minlength="6" />
+                        <button type="button" class="password-toggle" onclick="togglePassword('matKhau',this)">👁️</button>
+                    </div>
+                    <div class="password-strength" id="strengthContainer" style="display:none;margin-top:8px;">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text">Độ mạnh: <strong id="strengthLabel">Yếu</strong></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="xacNhanMatKhau">Xác nhận mật khẩu <span style="color:#EF4444">*</span></label>
+                    <div class="input-with-toggle">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="xacNhanMatKhau"
+                            name="XacNhanMatKhau"
+                            placeholder="Nhập lại mật khẩu"
+                            autocomplete="new-password"
+                            required />
+                        <button type="button" class="password-toggle" onclick="togglePassword('xacNhanMatKhau',this)">👁️</button>
+                    </div>
+                    <div class="form-text text-danger" id="confirmError" style="display:none;">Mật khẩu không khớp</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth" id="registerBtn">
+                <div class="spinner"></div>
+                <span class="btn-text">Đăng ký tài khoản</span>
+            </button>
+        </form>
+
+        <div class="auth-form-footer">
+            Đã có tài khoản?
+            <a href="@Url.Action("Login", "Account")">Đăng nhập ngay</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        input.type = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? '👁️' : '🙈';
+    }
+
+    // Password strength meter
+    document.getElementById('matKhau').addEventListener('input', function () {
+        const val = this.value;
+        const container = document.getElementById('strengthContainer');
+        const fill = document.getElementById('strengthFill');
+        const label = document.getElementById('strengthLabel');
+        if (!val) { container.style.display = 'none'; return; }
+        container.style.display = 'block';
+
+        let score = 0;
+        if (val.length >= 6)  score++;
+        if (val.length >= 10) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const levels = [
+            { pct: '20%', color: '#EF4444', text: 'Rất yếu' },
+            { pct: '40%', color: '#F59E0B', text: 'Yếu' },
+            { pct: '60%', color: '#F59E0B', text: 'Trung bình' },
+            { pct: '80%', color: '#10B981', text: 'Mạnh' },
+            { pct: '100%',color: '#10B981', text: 'Rất mạnh' },
+        ];
+        const lv = levels[Math.min(score, 4)];
+        fill.style.width = lv.pct;
+        fill.style.background = lv.color;
+        label.textContent = lv.text;
+        label.style.color = lv.color;
+    });
+
+    // Confirm password match
+    document.getElementById('xacNhanMatKhau').addEventListener('input', function () {
+        const err = document.getElementById('confirmError');
+        err.style.display = this.value && this.value !== document.getElementById('matKhau').value ? 'block' : 'none';
+    });
+
+    // Submit loading
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+        const pw  = document.getElementById('matKhau').value;
+        const cpw = document.getElementById('xacNhanMatKhau').value;
+        if (pw !== cpw) { e.preventDefault(); return; }
+        const btn = document.getElementById('registerBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+    });
+</script>
+</body>
+</html>

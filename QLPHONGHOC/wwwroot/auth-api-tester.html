@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication API Tester - Quản Lý Phòng Học</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .response-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .response-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .response-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .response-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .response-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .response-content {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #333;
+            max-height: 200px;
+            overflow-y: auto;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .token-info {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .token-info strong {
+            color: #0066cc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .info-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .info-item strong {
+            color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Authentication API Tester</h1>
+
+        <div class="grid">
+            <!-- LOGIN CARD -->
+            <div class="card">
+                <h2>📍 API Login</h2>
+
+                <div class="form-group">
+                    <label>Tên Đăng Nhập</label>
+                    <input type="text" id="loginUsername" placeholder="admin" value="admin">
+                </div>
+
+                <div class="form-group">
+                    <label>Mật Khẩu</label>
+                    <input type="password" id="loginPassword" placeholder="password123" value="">
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="loginRemember">
+                    <label>Ghi nhớ đăng nhập</label>
+                </div>
+
+                <button onclick="testLogin()">🔐 Đăng Nhập</button>
+
+                <div class="response-section" id="loginResponse" style="display: none;">
+                    <div class="response-title">Response:</div>
+                    <div id="loginStatus"></div>
+                    <div id="loginContent" class="response-content"></div>
+                </div>
+
+                <div class="token-info" id="tokenInfo" style="display: none;">
+                    <strong>✅ Token Active</strong>
+                    <div>Hết hạn trong: <span id="tokenTimeout">0</span>s</div>
+                </div>
+            </div>
+
+            <!-- REGISTER CARD -->
+            <div class="card">
+                <h2>📝 API Register</h2>
+
+                <div class="form-group">
+                    <label>Tên Đăng Nhập</label>
+                    <input type="text" id="regUsername" placeholder="newuser">
+                </div>
+
+                <div class="form-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" id="regFullname" placeholder="Người Dùng Mới">
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="newuser@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Số Điện Thoại</label>
+                    <input type="tel" id="regPhone" placeholder="0987654321">
+                </div>
+
+                <div class="form-group">
+                    <label>Mật Khẩu</label>
+                    <input type="password" id="regPassword" placeholder="password123">
+                </div>
+
+                <div class="form-group">
+                    <label>Xác Nhận Mật Khẩu</label>
+                    <input type="password" id="regConfirmPassword" placeholder="password123">
+                </div>
+
+                <button onclick="testRegister()">✍️ Đăng Ký</button>
+
+                <div class="response-section" id="regResponse" style="display: none;">
+                    <div class="response-title">Response:</div>
+                    <div id="regStatus"></div>
+                    <div id="regContent" class="response-content"></div>
+                </div>
+            </div>
+
+            <!-- PROTECTED API CARD -->
+            <div class="card">
+                <h2>🔒 Protected API</h2>
+
+                <div class="form-group">
+                    <label>API Endpoint</label>
+                    <input type="text" id="protectedEndpoint" placeholder="/api/PhongHoc" value="/api/PhongHoc">
+                </div>
+
+                <div class="form-group">
+                    <label>HTTP Method</label>
+                    <select id="protectedMethod" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Request Body (JSON)</label>
+                    <textarea id="protectedBody" placeholder='{"example": "data"}'></textarea>
+                </div>
+
+                <button onclick="testProtected()">🚀 Send Request</button>
+
+                <div class="response-section" id="protectedResponse" style="display: none;">
+                    <div class="response-title">Response:</div>
+                    <div id="protectedStatus"></div>
+                    <div id="protectedContent" class="response-content"></div>
+                </div>
+            </div>
+
+            <!-- TOKEN INFO CARD -->
+            <div class="card">
+                <h2>🔑 Token Information</h2>
+
+                <button onclick="refreshTokenInfo()" style="margin-bottom: 15px;">🔄 Refresh</button>
+
+                <div id="tokenDetails" style="display: none;">
+                    <div class="info-grid" id="tokenGrid"></div>
+                </div>
+
+                <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <button onclick="clearToken()" style="background: #e74c3c;">🚪 Logout</button>
+                </div>
+            </div>
+
+            <!-- ERROR CODES CARD -->
+            <div class="card">
+                <h2>❌ Error Codes Reference</h2>
+
+                <div class="info-grid" id="errorCodesGrid" style="grid-template-columns: 1fr; gap: 8px; max-height: 300px; overflow-y: auto;">
+                    <div style="text-align: center; color: #999;">Loading...</div>
+                </div>
+            </div>
+
+            <!-- API DOCUMENTATION CARD -->
+            <div class="card">
+                <h2>📚 Quick Reference</h2>
+
+                <div style="font-size: 12px; line-height: 1.8; color: #555;">
+                    <p><strong>🔐 Login Endpoint:</strong></p>
+                    <code style="background: #f5f5f5; padding: 5px; border-radius: 3px;">POST /api/Account/Login</code>
+
+                    <p style="margin-top: 10px;"><strong>📝 Register Endpoint:</strong></p>
+                    <code style="background: #f5f5f5; padding: 5px; border-radius: 3px;">POST /api/Account/Register</code>
+
+                    <p style="margin-top: 10px;"><strong>🔑 Token Usage:</strong></p>
+                    <code style="background: #f5f5f5; padding: 5px; border-radius: 3px;">Authorization: Bearer [token]</code>
+
+                    <p style="margin-top: 10px;"><strong>✅ Test Credentials:</strong></p>
+                    <div style="background: #f9f9f9; padding: 8px; border-radius: 3px; margin-top: 5px;">
+                        <div>Username: <code>admin</code></div>
+                        <div>Password: <code>hashedPassword</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth-client.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:5266';
+
+        // Test Login
+        async function testLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                alert('Vui lòng nhập đầy đủ thông tin');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/Account/Login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tenDangNhap: username,
+                        matKhau: password
+                    })
+                });
+
+                const data = await response.json();
+
+                const responseDiv = document.getElementById('loginResponse');
+                const statusDiv = document.getElementById('loginStatus');
+                const contentDiv = document.getElementById('loginContent');
+
+                if (response.ok) {
+                    statusDiv.innerHTML = `<div class="response-status success">✅ HTTP ${response.status} - Success</div>`;
+                    saveToken(data.token, data.expiresIn);
+                    document.getElementById('tokenInfo').style.display = 'block';
+                    updateTokenTimeout();
+                } else {
+                    statusDiv.innerHTML = `<div class="response-status error">❌ HTTP ${response.status} - Error</div>`;
+                }
+
+                contentDiv.textContent = JSON.stringify(data, null, 2);
+                responseDiv.style.display = 'block';
+
+                refreshTokenInfo();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Test Register
+        async function testRegister() {
+            const username = document.getElementById('regUsername').value;
+            const fullname = document.getElementById('regFullname').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (!username || !fullname || !email || !phone || !password || !confirmPassword) {
+                alert('Vui lòng nhập đầy đủ thông tin');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/Account/Register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tenDangNhap: username,
+                        hoTen: fullname,
+                        email: email,
+                        soDienThoai: phone,
+                        matKhau: password,
+                        xacNhanMatKhau: confirmPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                const responseDiv = document.getElementById('regResponse');
+                const statusDiv = document.getElementById('regStatus');
+                const contentDiv = document.getElementById('regContent');
+
+                if (response.ok) {
+                    statusDiv.innerHTML = `<div class="response-status success">✅ HTTP ${response.status} - Success</div>`;
+                } else {
+                    statusDiv.innerHTML = `<div class="response-status error">❌ HTTP ${response.status} - Error</div>`;
+                }
+
+                contentDiv.textContent = JSON.stringify(data, null, 2);
+                responseDiv.style.display = 'block';
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Test Protected API
+        async function testProtected() {
+            const token = getToken();
+            if (!token) {
+                alert('Vui lòng đăng nhập trước');
+                return;
+            }
+
+            const endpoint = document.getElementById('protectedEndpoint').value;
+            const method = document.getElementById('protectedMethod').value;
+            const bodyText = document.getElementById('protectedBody').value;
+
+            try {
+                let body = undefined;
+                if (bodyText && (method === 'POST' || method === 'PUT')) {
+                    body = JSON.parse(bodyText);
+                }
+
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: body ? JSON.stringify(body) : undefined
+                });
+
+                const contentType = response.headers.get('content-type');
+                let data;
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    data = await response.text();
+                }
+
+                const responseDiv = document.getElementById('protectedResponse');
+                const statusDiv = document.getElementById('protectedStatus');
+                const contentDiv = document.getElementById('protectedContent');
+
+                if (response.ok) {
+                    statusDiv.innerHTML = `<div class="response-status success">✅ HTTP ${response.status} - Success</div>`;
+                } else {
+                    statusDiv.innerHTML = `<div class="response-status error">❌ HTTP ${response.status} - Error</div>`;
+                }
+
+                if (typeof data === 'object') {
+                    contentDiv.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    contentDiv.textContent = data;
+                }
+                responseDiv.style.display = 'block';
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Refresh Token Info
+        function refreshTokenInfo() {
+            const token = getToken();
+            const tokenDetails = document.getElementById('tokenDetails');
+            const tokenGrid = document.getElementById('tokenGrid');
+
+            if (token) {
+                try {
+                    // Decode JWT (simple decode, không verify)
+                    const parts = token.split('.');
+                    const payload = JSON.parse(atob(parts[1]));
+
+                    const expiresAt = payload.exp * 1000;
+                    const now = new Date().getTime();
+                    const remaining = Math.floor((expiresAt - now) / 1000);
+
+                    let html = `
+                        <div class="info-item">
+                            <strong>Status:</strong>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>User ID:</strong>
+                            ${payload.nameid || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Username:</strong>
+                            ${payload.unique_name || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Email:</strong>
+                            ${payload.email || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Role:</strong>
+                            ${payload.VaiTro || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Remaining:</strong>
+                            ${remaining > 0 ? remaining + 's' : 'Expired'}
+                        </div>
+                    `;
+
+                    tokenGrid.innerHTML = html;
+                    tokenDetails.style.display = 'block';
+                } catch (error) {
+                    console.error('Token decode error:', error);
+                }
+            } else {
+                tokenDetails.style.display = 'none';
+                document.getElementById('tokenInfo').style.display = 'none';
+            }
+        }
+
+        // Update Token Timeout
+        function updateTokenTimeout() {
+            const remaining = getTokenTimeRemaining();
+            document.getElementById('tokenTimeout').textContent = remaining;
+
+            if (remaining > 0) {
+                setTimeout(updateTokenTimeout, 1000);
+            }
+        }
+
+        // Populate Error Codes
+        function populateErrorCodes() {
+            const errorCodes = {
+                'EMPTY_CREDENTIALS': 'Tên đăng nhập hoặc mật khẩu trống',
+                'INVALID_CREDENTIALS': 'Tên đăng nhập/mật khẩu sai',
+                'ACCOUNT_PENDING': 'Tài khoản chờ phê duyệt',
+                'ACCOUNT_LOCKED': 'Tài khoản bị khóa',
+                'ACCOUNT_REJECTED': 'Đăng ký bị từ chối',
+                'USERNAME_EXISTS': 'Tên đăng nhập đã tồn tại',
+                'EMAIL_EXISTS': 'Email đã được sử dụng',
+                'PASSWORD_MISMATCH': 'Mật khẩu không khớp',
+                'WEAK_PASSWORD': 'Mật khẩu quá yếu'
+            };
+
+            let html = '';
+            for (const [code, msg] of Object.entries(errorCodes)) {
+                html += `<div class="info-item"><strong>${code}:</strong><br>${msg}</div>`;
+            }
+
+            document.getElementById('errorCodesGrid').innerHTML = html;
+        }
+
+        // Logout
+        function clearTokenUI() {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('tokenExpiresAt');
+            document.getElementById('tokenInfo').style.display = 'none';
+            document.getElementById('tokenDetails').style.display = 'none';
+            refreshTokenInfo();
+            alert('Đã đăng xuất');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', function() {
+            populateErrorCodes();
+            refreshTokenInfo();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+-- KỊCH BẢN T-SQL KHỞI TẠO CƠ SỞ DỮ LIỆU
+-- Dự án: Hệ thống Quản lý Phòng học (QLPHONGHOC)
+
+-- 1. Tạo Database (nếu chưa có)
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'QLPHONGHOC')
+BEGIN
+    CREATE DATABASE QLPHONGHOC;
+END
+GO
+
+USE QLPHONGHOC;
+GO
+
+-- 2. Xóa các bảng cũ theo thứ tự đảo ngược của ràng buộc để tránh lỗi khóa ngoại
+IF OBJECT_ID('dbo.LICHSUDUNGPHONG', 'U') IS NOT NULL DROP TABLE dbo.LICHSUDUNGPHONG;
+IF OBJECT_ID('dbo.LICHSU', 'U') IS NOT NULL DROP TABLE dbo.LICHSU;
+IF OBJECT_ID('dbo.BAOTRI', 'U') IS NOT NULL DROP TABLE dbo.BAOTRI;
+IF OBJECT_ID('dbo.SUCO', 'U') IS NOT NULL DROP TABLE dbo.SUCO;
+IF OBJECT_ID('dbo.DANGKY', 'U') IS NOT NULL DROP TABLE dbo.DANGKY;
+IF OBJECT_ID('dbo.THIETBI', 'U') IS NOT NULL DROP TABLE dbo.THIETBI;
+IF OBJECT_ID('dbo.PHONGHOC', 'U') IS NOT NULL DROP TABLE dbo.PHONGHOC;
+IF OBJECT_ID('dbo.TAIKHOAN', 'U') IS NOT NULL DROP TABLE dbo.TAIKHOAN;
+IF OBJECT_ID('dbo.VAITRO', 'U') IS NOT NULL DROP TABLE dbo.VAITRO;
+GO
+
+-- 3. Tạo bảng VAITRO
+CREATE TABLE VAITRO (
+    MaVaiTro INT IDENTITY(1,1) PRIMARY KEY,
+    TenVaiTro NVARCHAR(50) NOT NULL UNIQUE
+);
+GO
+
+-- 4. Tạo bảng TAIKHOAN (Đồng bộ với Authentication)
+CREATE TABLE TAIKHOAN (
+    MaTaiKhoan INT IDENTITY(1,1) PRIMARY KEY,
+    TenDangNhap NVARCHAR(50) NOT NULL UNIQUE,
+    MatKhau VARCHAR(255) NOT NULL, -- Độ dài lớn để chứa BCrypt Hash
+    HoTen NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) NOT NULL UNIQUE,
+    SoDienThoai NVARCHAR(15) NULL,
+    MaVaiTro INT NOT NULL,
+    TrangThai NVARCHAR(30) NOT NULL DEFAULT N'Chờ duyệt',
+    CONSTRAINT FK_TAIKHOAN_VAITRO FOREIGN KEY (MaVaiTro) REFERENCES VAITRO(MaVaiTro)
+);
+GO
+
+-- 5. Tạo bảng PHONGHOC
+CREATE TABLE PHONGHOC (
+    MaPhong INT IDENTITY(1,1) PRIMARY KEY,
+    TenPhong NVARCHAR(50) NOT NULL UNIQUE,
+    DayNha NVARCHAR(50) NOT NULL,
+    Tang INT NOT NULL,
+    SucChua INT NOT NULL,
+    LoaiPhong NVARCHAR(50) NOT NULL,
+    TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Trống',
+    GhiChu NVARCHAR(255) NULL
+);
+GO
+
+-- 6. Tạo bảng THIETBI
+CREATE TABLE THIETBI (
+    MaThietBi INT IDENTITY(1,1) PRIMARY KEY,
+    TenThietBi NVARCHAR(100) NOT NULL,
+    MaPhong INT NOT NULL,
+    SoLuong INT NOT NULL DEFAULT 1,
+    TinhTrang NVARCHAR(50) NOT NULL DEFAULT N'Hoạt động',
+    GhiChu NVARCHAR(255) NULL,
+    CONSTRAINT FK_THIETBI_PHONGHOC FOREIGN KEY (MaPhong) REFERENCES PHONGHOC(MaPhong) ON DELETE CASCADE
+);
+GO
+
+-- 7. Tạo bảng DANGKY (Mượn phòng)
+CREATE TABLE DANGKY (
+    MaYeuCau INT IDENTITY(1,1) PRIMARY KEY,
+    MaGiangVien INT NOT NULL,
+    MaPhong INT NOT NULL,
+    NgaySuDung DATETIME NOT NULL,
+    TietBatDau INT NOT NULL,
+    TietKetThuc INT NOT NULL,
+    MucDich NVARCHAR(255) NULL,
+    TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Chờ duyệt',
+    LyDoTuChoi NVARCHAR(255) NULL,
+    NgayTao DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_DANGKY_TAIKHOAN FOREIGN KEY (MaGiangVien) REFERENCES TAIKHOAN(MaTaiKhoan) ON DELETE NO ACTION,
+    CONSTRAINT FK_DANGKY_PHONGHOC FOREIGN KEY (MaPhong) REFERENCES PHONGHOC(MaPhong) ON DELETE NO ACTION
+);
+GO
+
+-- 8. Tạo bảng SUCO (Báo cáo sự cố)
+CREATE TABLE SUCO (
+    MaSuCo INT IDENTITY(1,1) PRIMARY KEY,
+    MaPhong INT NOT NULL,
+    MaThietBi INT NULL,
+    NguoiBaoCao INT NOT NULL,
+    MoTaSuCo NVARCHAR(255) NOT NULL,
+    NgayBaoCao DATETIME NOT NULL DEFAULT GETDATE(),
+    TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Chờ xử lý',
+    CONSTRAINT FK_SUCO_PHONGHOC FOREIGN KEY (MaPhong) REFERENCES PHONGHOC(MaPhong) ON DELETE CASCADE,
+    CONSTRAINT FK_SUCO_THIETBI FOREIGN KEY (MaThietBi) REFERENCES THIETBI(MaThietBi) ON DELETE NO ACTION,
+    CONSTRAINT FK_SUCO_TAIKHOAN FOREIGN KEY (NguoiBaoCao) REFERENCES TAIKHOAN(MaTaiKhoan) ON DELETE NO ACTION
+);
+GO
+
+-- 9. Tạo bảng BAOTRI (Lịch bảo trì)
+CREATE TABLE BAOTRI (
+    MaBaoTri INT IDENTITY(1,1) PRIMARY KEY,
+    MaSuCo INT NOT NULL,
+    MaKyThuatVien INT NOT NULL,
+    NgayXuLy DATETIME NOT NULL DEFAULT GETDATE(),
+    NoiDungXuLy NVARCHAR(255) NOT NULL,
+    KetQua NVARCHAR(100) NOT NULL DEFAULT N'Đang sửa',
+    CONSTRAINT FK_BAOTRI_SUCO FOREIGN KEY (MaSuCo) REFERENCES SUCO(MaSuCo) ON DELETE CASCADE,
+    CONSTRAINT FK_BAOTRI_TAIKHOAN FOREIGN KEY (MaKyThuatVien) REFERENCES TAIKHOAN(MaTaiKhoan) ON DELETE NO ACTION
+);
+GO
+
+-- 10. Tạo bảng LICHSU (Nhật ký hệ thống/bảo trì)
+CREATE TABLE LICHSU (
+    MaLichSu INT IDENTITY(1,1) PRIMARY KEY,
+    LoaiLichSu NVARCHAR(50) NOT NULL,
+    NoiDung NVARCHAR(500) NOT NULL,
+    NgayTao DATETIME NOT NULL DEFAULT GETDATE(),
+    NguoiThucHien INT NULL,
+    CONSTRAINT FK_LICHSU_TAIKHOAN FOREIGN KEY (NguoiThucHien) REFERENCES TAIKHOAN(MaTaiKhoan) ON DELETE SET NULL
+);
+GO
+
+-- 11. Tạo bảng LICHSUDUNGPHONG (Lịch sử sử dụng phòng học)
+CREATE TABLE LICHSUDUNGPHONG (
+    MaLich INT IDENTITY(1,1) PRIMARY KEY,
+    MaPhong INT NOT NULL,
+    MaGiangVien INT NOT NULL,
+    MaYeuCau INT NULL,
+    NgaySuDung DATETIME NOT NULL,
+    TietBatDau INT NOT NULL,
+    TietKetThuc INT NOT NULL,
+    NoiDung NVARCHAR(255) NULL,
+    TrangThai NVARCHAR(50) NOT NULL DEFAULT N'Đã duyệt',
+    CONSTRAINT FK_LICHSUDUNGPHONG_PHONGHOC FOREIGN KEY (MaPhong) REFERENCES PHONGHOC(MaPhong) ON DELETE CASCADE,
+    CONSTRAINT FK_LICHSUDUNGPHONG_TAIKHOAN FOREIGN KEY (MaGiangVien) REFERENCES TAIKHOAN(MaTaiKhoan) ON DELETE NO ACTION,
+    CONSTRAINT FK_LICHSUDUNGPHONG_DANGKY FOREIGN KEY (MaYeuCau) REFERENCES DANGKY(MaYeuCau) ON DELETE NO ACTION
+);
+GO
+
+-- 12. Tạo các INDEX tối ưu hiệu năng tìm kiếm và JOIN
+CREATE NONCLUSTERED INDEX IX_TAIKHOAN_TenDangNhap ON TAIKHOAN(TenDangNhap);
+CREATE NONCLUSTERED INDEX IX_TAIKHOAN_Email ON TAIKHOAN(Email);
+CREATE NONCLUSTERED INDEX IX_PHONGHOC_TrangThai ON PHONGHOC(TrangThai);
+CREATE NONCLUSTERED INDEX IX_THIETBI_MaPhong_TinhTrang ON THIETBI(MaPhong, TinhTrang);
+CREATE NONCLUSTERED INDEX IX_DANGKY_MaPhong_NgaySuDung_TrangThai ON DANGKY(MaPhong, NgaySuDung, TrangThai);
+CREATE NONCLUSTERED INDEX IX_SUCO_MaPhong_TrangThai ON SUCO(MaPhong, TrangThai);
+CREATE NONCLUSTERED INDEX IX_BAOTRI_MaSuCo ON BAOTRI(MaSuCo);
+CREATE NONCLUSTERED INDEX IX_LICHSUDUNGPHONG_MaPhong_NgaySuDung ON LICHSUDUNGPHONG(MaPhong, NgaySuDung);
+CREATE NONCLUSTERED INDEX IX_LICHSU_NgayTao ON LICHSU(NgayTao);
+GO
+
+-- 13. Chèn Dữ Liệu Seed
+-- Seed Vai Trò
+INSERT INTO VAITRO (TenVaiTro) VALUES (N'Admin');
+INSERT INTO VAITRO (TenVaiTro) VALUES (N'Giảng viên');
+INSERT INTO VAITRO (TenVaiTro) VALUES (N'Kỹ thuật viên');
+GO
+
+-- Seed Tài Khoản Mẫu (Password đều là: admin123)
+-- Hash: $2a$12$x2FJ6D3vWGzKzEYfXJfIu.MQS2D5SJpEFjLKrKDsVWxzgfF2Q2qfO
+INSERT INTO TAIKHOAN (TenDangNhap, MatKhau, HoTen, Email, SoDienThoai, MaVaiTro, TrangThai)
+VALUES (N'admin', '$2a$12$x2FJ6D3vWGzKzEYfXJfIu.MQS2D5SJpEFjLKrKDsVWxzgfF2Q2qfO', N'Quản Trị Viên', N'admin@example.com', '0987654321', 1, N'Hoạt động');
+
+INSERT INTO TAIKHOAN (TenDangNhap, MatKhau, HoTen, Email, SoDienThoai, MaVaiTro, TrangThai)
+VALUES (N'giangvien1', '$2a$12$x2FJ6D3vWGzKzEYfXJfIu.MQS2D5SJpEFjLKrKDsVWxzgfF2Q2qfO', N'Nguyễn Giảng Viên', N'giangvien1@example.com', '0987654322', 2, N'Hoạt động');
+
+INSERT INTO TAIKHOAN (TenDangNhap, MatKhau, HoTen, Email, SoDienThoai, MaVaiTro, TrangThai)
+VALUES (N'kythuat1', '$2a$12$x2FJ6D3vWGzKzEYfXJfIu.MQS2D5SJpEFjLKrKDsVWxzgfF2Q2qfO', N'Trần Kỹ Thuật', N'kythuat1@example.com', '0987654323', 3, N'Hoạt động');
+
+INSERT INTO TAIKHOAN (TenDangNhap, MatKhau, HoTen, Email, SoDienThoai, MaVaiTro, TrangThai)
+VALUES (N'user_cho_duyet', '$2a$12$x2FJ6D3vWGzKzEYfXJfIu.MQS2D5SJpEFjLKrKDsVWxzgfF2Q2qfO', N'Người Dùng Mới', N'newuser@example.com', '0987654324', 2, N'Chờ duyệt');
+GO
+
+-- Seed Phòng Học Mẫu
+INSERT INTO PHONGHOC (TenPhong, DayNha, Tang, SucChua, LoaiPhong, TrangThai, GhiChu)
+VALUES 
+(N'A1-101', N'Nhà A1', 1, 80, N'Phòng học lý thuyết', N'Hoạt động', N'Phòng học thường'),
+(N'A1-102', N'Nhà A1', 1, 45, N'Phòng học lý thuyết', N'Hoạt động', N'Phòng học thường'),
+(N'B2-201', N'Nhà B2', 2, 60, N'Phòng máy tính', N'Hoạt động', N'Phòng máy chất lượng cao'),
+(N'C1-301', N'Nhà C1', 3, 120, N'Hội trường lớn', N'Hoạt động', N'Hội trường tổ chức sự kiện');
+GO
+
+-- Seed Thiết Bị Mẫu
+INSERT INTO THIETBI (TenThietBi, MaPhong, SoLuong, TinhTrang, GhiChu)
+VALUES 
+(N'Máy chiếu Sony', 1, 1, N'Hoạt động', N'Máy chiếu treo tường'),
+(N'Điều hòa Panasonic', 1, 2, N'Hoạt động', N'Điều hòa 18000 BTU'),
+(N'Hệ thống Máy tính trạm Dell', 3, 40, N'Hoạt động', N'Cấu hình Intel Core i5'),
+(N'Máy chiếu Panasonic', 4, 1, N'Cần sửa chữa', N'Lỗi bóng hình máy chiếu');
+GO

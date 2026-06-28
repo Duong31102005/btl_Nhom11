@@ -1,0 +1,238 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+}
+
+<!-- Dashboard Content -->
+<div class="page-header">
+    <div class="page-header-left">
+        <h1>Tổng quan hệ thống</h1>
+        <p>Xem thống kê và tình trạng các phòng học</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="@Url.Action("Create", "PhongHoc")" class="btn btn-primary">
+            <span>+ Thêm phòng mới</span>
+        </a>
+    </div>
+</div>
+
+<!-- Stat Cards Grid -->
+<div class="stat-grid">
+    <!-- Total Rooms -->
+    <div class="stat-card">
+        <div class="stat-card-left">
+            <div class="stat-value">24</div>
+            <div class="stat-label">Tổng phòng học</div>
+            <div class="stat-change up">
+                <span>↑ 12%</span>
+                <span class="text-caption">so với tháng trước</span>
+            </div>
+        </div>
+        <div class="stat-card-icon blue">🏫</div>
+    </div>
+
+    <!-- Available Rooms -->
+    <div class="stat-card">
+        <div class="stat-card-left">
+            <div class="stat-value">18</div>
+            <div class="stat-label">Phòng trống</div>
+            <div class="stat-change up">
+                <span>↑ 8%</span>
+                <span class="text-caption">khả dụng ngay</span>
+            </div>
+        </div>
+        <div class="stat-card-icon green">✅</div>
+    </div>
+
+    <!-- Pending Requests -->
+    <div class="stat-card">
+        <div class="stat-card-left">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Yêu cầu chờ duyệt</div>
+            <div class="stat-change down">
+                <span>↓ 3%</span>
+                <span class="text-caption">cần xử lý</span>
+            </div>
+        </div>
+        <div class="stat-card-icon orange">📋</div>
+    </div>
+
+    <!-- Unresolved Issues -->
+    <div class="stat-card">
+        <div class="stat-card-left">
+            <div class="stat-value">2</div>
+            <div class="stat-label">Sự cố chưa xử lý</div>
+            <div class="stat-change down">
+                <span>↑ 1</span>
+                <span class="text-caption">cần theo dõi</span>
+            </div>
+        </div>
+        <div class="stat-card-icon red">⚠️</div>
+    </div>
+</div>
+
+<!-- Charts & Recent Activity Grid -->
+<div class="dashboard-grid">
+    <!-- Left Column: Charts & Activities -->
+    <div>
+        <!-- Top Rooms Chart -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>📊 Phòng được sử dụng nhiều nhất</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-sub);">Tuần này</div>
+            </div>
+            <div class="card-body" style="padding: var(--space-6) var(--space-4);">
+                <div class="bar-chart">
+                    <div class="bar-col">
+                        <div class="bar" style="height: 85%;">
+                            <div class="bar-tooltip">42 lần</div>
+                        </div>
+                        <div class="bar-label">L301</div>
+                        <div class="bar-value">42</div>
+                    </div>
+                    <div class="bar-col">
+                        <div class="bar" style="height: 72%;">
+                            <div class="bar-tooltip">36 lần</div>
+                        </div>
+                        <div class="bar-label">L302</div>
+                        <div class="bar-value">36</div>
+                    </div>
+                    <div class="bar-col">
+                        <div class="bar" style="height: 68%;">
+                            <div class="bar-tooltip">34 lần</div>
+                        </div>
+                        <div class="bar-label">L401</div>
+                        <div class="bar-value">34</div>
+                    </div>
+                    <div class="bar-col">
+                        <div class="bar" style="height: 55%;">
+                            <div class="bar-tooltip">27 lần</div>
+                        </div>
+                        <div class="bar-label">A101</div>
+                        <div class="bar-value">27</div>
+                    </div>
+                    <div class="bar-col">
+                        <div class="bar" style="height: 48%;">
+                            <div class="bar-tooltip">24 lần</div>
+                        </div>
+                        <div class="bar-label">A102</div>
+                        <div class="bar-value">24</div>
+                    </div>
+                    <div class="bar-col">
+                        <div class="bar" style="height: 42%;">
+                            <div class="bar-tooltip">21 lần</div>
+                        </div>
+                        <div class="bar-label">B201</div>
+                        <div class="bar-value">21</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Incidents -->
+        <div class="card" style="margin-top: var(--space-5);">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>🚨 Sự cố gần đây</span>
+                </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="incident-list">
+                    <div class="incident-item">
+                        <div class="incident-indicator high"></div>
+                        <div class="incident-info">
+                            <div class="incident-title">Đèn bị hỏng tại L301</div>
+                            <div class="incident-meta">Báo cáo 2 giờ trước · Ưu tiên cao</div>
+                        </div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-indicator medium"></div>
+                        <div class="incident-info">
+                            <div class="incident-title">Máy chiếu tại L402 không hoạt động</div>
+                            <div class="incident-meta">Báo cáo 1 ngày trước · Ưu tiên trung bình</div>
+                        </div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-indicator low"></div>
+                        <div class="incident-info">
+                            <div class="incident-title">Cần lau dọn phòng A102</div>
+                            <div class="incident-meta">Báo cáo 3 ngày trước · Ưu tiên thấp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Upcoming Bookings & Status -->
+    <div>
+        <!-- Quick Status -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>🔍 Tình trạng phòng hôm nay</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--accent-success-bg);border-radius:var(--radius-md);">
+                        <div>
+                            <div style="font-weight:600;color:var(--accent-success);">Phòng trống</div>
+                            <div style="font-size:12px;color:var(--text-sub);">18 phòng</div>
+                        </div>
+                        <div style="font-size:24px;">✅</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--accent-info-bg);border-radius:var(--radius-md);">
+                        <div>
+                            <div style="font-weight:600;color:var(--accent-info);">Phòng đang sử dụng</div>
+                            <div style="font-size:12px;color:var(--text-sub);">4 phòng</div>
+                        </div>
+                        <div style="font-size:24px;">📌</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--accent-warning-bg);border-radius:var(--radius-md);">
+                        <div>
+                            <div style="font-weight:600;color:var(--accent-warning);">Đang bảo trì</div>
+                            <div style="font-size:12px;color:var(--text-sub);">1 phòng</div>
+                        </div>
+                        <div style="font-size:24px;">🔧</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--accent-danger-bg);border-radius:var(--radius-md);">
+                        <div>
+                            <div style="font-weight:600;color:var(--accent-danger);">Ngừng sử dụng</div>
+                            <div style="font-size:12px;color:var(--text-sub);">1 phòng</div>
+                        </div>
+                        <div style="font-size:24px;">⛔</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="card" style="margin-top: var(--space-5);">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>📅 Lịch hoạt động</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+                    <div style="padding:var(--space-3);background:var(--bg-canvas);border-radius:var(--radius-md);border-left:4px solid var(--primary-blue);">
+                        <div style="font-size:13px;font-weight:600;color:var(--text-main);">Kiểm tra thiết bị dãy L</div>
+                        <div style="font-size:12px;color:var(--text-sub);margin-top:4px;">Thứ Hai · 9:00 AM</div>
+                    </div>
+                    <div style="padding:var(--space-3);background:var(--bg-canvas);border-radius:var(--radius-md);border-left:4px solid var(--accent-warning);">
+                        <div style="font-size:13px;font-weight:600;color:var(--text-main);">Bảo trì định kỳ L301</div>
+                        <div style="font-size:12px;color:var(--text-sub);margin-top:4px;">Thứ Ba · 2:00 PM</div>
+                    </div>
+                    <div style="padding:var(--space-3);background:var(--bg-canvas);border-radius:var(--radius-md);border-left:4px solid var(--accent-success);">
+                        <div style="font-size:13px;font-weight:600;color:var(--text-main);">Sự kiện quốc phòng A101</div>
+                        <div style="font-size:12px;color:var(--text-sub);margin-top:4px;">Thứ Tư · 6:00 PM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
